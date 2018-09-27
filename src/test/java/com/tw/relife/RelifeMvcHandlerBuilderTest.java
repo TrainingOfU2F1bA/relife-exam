@@ -22,6 +22,18 @@ class RelifeMvcHandlerBuilderTest {
     }
 
     @Test
+    void should_response_404_with_unknow_request_path() {
+        RelifeAppHandler handler = new RelifeMvcHandlerBuilder()
+                .addAction("/path", RelifeMethod.GET, request -> new RelifeResponse(200,"Hello","text/plain"))
+                .build();
+        RelifeApp app = new RelifeApp(handler);
+        RelifeResponse response = app.process(
+                new RelifeRequest("/unknow", RelifeMethod.GET));
+
+        assertEquals(404,response.getStatus());
+    }
+
+    @Test
     void should_throw_illgegalArgumentException_when_one_parameter_of_addAction_is_null() {
         Executable executable = () ->new RelifeMvcHandlerBuilder()
                 .addAction("/path", null, request -> new RelifeResponse(200,"Hello","text/plain"));
