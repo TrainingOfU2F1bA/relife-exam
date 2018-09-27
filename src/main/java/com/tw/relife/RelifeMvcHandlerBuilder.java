@@ -20,6 +20,6 @@ public class RelifeMvcHandlerBuilder {
     }
 
     public RelifeAppHandler build() {
-        return relifeAppHandler;
+        return relifeAppHandler == null ? request -> new RelifeResponse(404) : relifeAppHandler;
     }
 }

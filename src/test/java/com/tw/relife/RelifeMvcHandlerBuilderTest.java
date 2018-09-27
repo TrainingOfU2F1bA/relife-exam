@@ -34,6 +34,18 @@ class RelifeMvcHandlerBuilderTest {
     }
 
     @Test
+    void should_build_a_relifeAppHandler_without_action_which_did_not_accept_any_request() {
+         RelifeAppHandler handler = new RelifeMvcHandlerBuilder()
+                .build();
+
+        RelifeApp app = new RelifeApp(handler);
+        RelifeResponse response = app.process(
+                new RelifeRequest("/any", RelifeMethod.GET));
+
+        assertEquals(404,response.getStatus());
+    }
+
+    @Test
     void should_can_return_status_code_which_be_annotation_on_exception() {
         RelifeAppHandler handler = new RelifeMvcHandlerBuilder()
                 .addAction("/path", RelifeMethod.GET, request -> {throw new SampleNotFoundException();})
