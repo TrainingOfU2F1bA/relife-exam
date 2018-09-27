@@ -1,5 +1,7 @@
 package com.tw.relife;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
@@ -11,7 +13,7 @@ public class RelifeAppHandlerImpl implements RelifeAppHandler{
     }
 
     @Override
-    public RelifeResponse process(RelifeRequest request) throws InvocationTargetException, IllegalAccessException {
+    public RelifeResponse process(RelifeRequest request) throws InvocationTargetException, IllegalAccessException, JsonProcessingException {
         ActionKey key = new ActionKey(request.getPath(), request.getMethod());
         if (handlers.containsKey(key)){
             RelifeResponse response = handlers.get(key).process(request);

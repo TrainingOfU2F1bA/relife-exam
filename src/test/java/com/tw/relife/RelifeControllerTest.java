@@ -95,16 +95,6 @@ class RelifeControllerTest {
     }
 
     @Test
-    void should_throw_illegalArugementExcepton_when_register_a_controller_with_relifeController_with_wrong_return_type() {
-        Executable executable = () -> new RelifeMvcHandlerBuilder()
-                .addController(ControllerWithWrongReturnType.class)
-                .build();
-
-        assertThrows(IllegalArgumentException.class, executable);
-
-    }
-
-    @Test
     void should_can_register_one_action_use_by_an_controller_which_with_multiple_action() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         RelifeAppHandler handler = new RelifeMvcHandlerBuilder()
                 .addController(MutipleActionController.class)

@@ -63,9 +63,9 @@ public class RelifeMvcHandlerBuilder {
             throw new IllegalArgumentException("Wrong action method with wrong parameter list");
         }
 
-        if (!RelifeResponse.class.equals(method.getReturnType())) {
-            throw new IllegalArgumentException("Wrong action method with wrong return type");
-        }
+//        if (!RelifeResponse.class.equals(method.getReturnType())) {
+//            throw new IllegalArgumentException("Wrong action method with wrong return type");
+//        }
     }
 
     private Constructor<?> validateContructor(Class<?> controller) throws NoSuchMethodException {
