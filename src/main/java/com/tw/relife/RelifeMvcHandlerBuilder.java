@@ -5,11 +5,14 @@ import java.util.HashMap;
 public class RelifeMvcHandlerBuilder {
 
     private RelifeAppHandlerImpl relifeAppHandler;
+    private HashMap<ActionKey, RelifeAppHandler> handlers = new HashMap<>();
 
     public RelifeMvcHandlerBuilder addAction(String path, RelifeMethod relifeMethod, RelifeAppHandler relifeAppHandler) {
         validateAction(path, relifeMethod, relifeAppHandler);
         ActionKey actionKey = new ActionKey(path, relifeMethod);
-        this.relifeAppHandler = new RelifeAppHandlerImpl(actionKey, relifeAppHandler);
+        handlers.computeIfAbsent(actionKey,key -> relifeAppHandler);
+
+        this.relifeAppHandler = new RelifeAppHandlerImpl(handlers);
         return this;
     }
 
