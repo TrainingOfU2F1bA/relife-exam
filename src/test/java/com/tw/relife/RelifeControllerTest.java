@@ -103,4 +103,26 @@ class RelifeControllerTest {
         assertThrows(IllegalArgumentException.class, executable);
 
     }
+
+    @Test
+    void should_can_register_one_action_use_by_an_controller_which_with_multiple_action() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        RelifeAppHandler handler = new RelifeMvcHandlerBuilder()
+                .addController(MutipleActionController.class)
+                .build();
+
+        RelifeApp app = new RelifeApp(handler);
+        RelifeResponse response = app.process(
+                new RelifeRequest("/path", RelifeMethod.GET));
+
+        assertEquals(200,response.getStatus());
+        assertEquals("Hello from /path",response.getContent());
+        assertEquals("text/plain",response.getContentType());
+
+        RelifeResponse hiResponse = app.process(
+                new RelifeRequest("/hi", RelifeMethod.GET));
+
+        assertEquals(200,hiResponse.getStatus());
+        assertEquals("Hi from /hi",hiResponse.getContent());
+        assertEquals("text/plain",hiResponse.getContentType());
+    }
 }
