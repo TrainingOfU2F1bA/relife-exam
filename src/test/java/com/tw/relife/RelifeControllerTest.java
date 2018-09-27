@@ -93,4 +93,14 @@ class RelifeControllerTest {
         assertThrows(IllegalArgumentException.class, executable);
 
     }
+
+    @Test
+    void should_throw_illegalArugementExcepton_when_register_a_controller_with_relifeController_with_wrong_return_type() {
+        Executable executable = () -> new RelifeMvcHandlerBuilder()
+                .addController(ControllerWithWrongReturnType.class)
+                .build();
+
+        assertThrows(IllegalArgumentException.class, executable);
+
+    }
 }

@@ -53,7 +53,11 @@ public class RelifeMvcHandlerBuilder {
     private void validateAction(Method method) {
         Class<?>[] parameterTypes = method.getParameterTypes();
         if (!(parameterTypes.length == 1 && RelifeRequest.class.equals(parameterTypes[0]))) {
-            throw new IllegalArgumentException("Wrong action method");
+            throw new IllegalArgumentException("Wrong action method with wrong parameter list");
+        }
+
+        if (!RelifeResponse.class.equals(method.getReturnType())) {
+            throw new IllegalArgumentException("Wrong action method with wrong return type");
         }
     }
 
