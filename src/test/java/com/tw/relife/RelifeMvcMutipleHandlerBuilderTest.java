@@ -1,5 +1,6 @@
 package com.tw.relife;
 
+import com.tw.relife.test.SampleBadRequetException;
 import com.tw.relife.test.SampleNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
@@ -43,4 +44,29 @@ class RelifeMvcMutipleHandlerBuilderTest {
 
         assertEquals(200,response.getStatus());
     }
+
+
+    @Test
+    void should_be_mapping_same_path_but_different_method_action() {
+         RelifeAppHandler handler = new RelifeMvcHandlerBuilder()
+                .addAction("/path", RelifeMethod.GET, request -> new RelifeResponse(200,"GET","text/plain"))
+                .addAction("/path", RelifeMethod.POST, request -> new RelifeResponse(200,"POST","text/plain"))
+        .build();
+
+        RelifeApp app = new RelifeApp(handler);
+        RelifeResponse studentResponse = app.process(
+                new RelifeRequest("/path", RelifeMethod.POST));
+
+        assertEquals(200,studentResponse.getStatus());
+        assertEquals("POST",studentResponse.getContent());
+        assertEquals("text/plain",studentResponse.getContentType());
+
+        RelifeResponse response = app.process(
+                new RelifeRequest("/path", RelifeMethod.GET));
+
+        assertEquals(200,response.getStatus());
+        assertEquals("GET",response.getContent());
+        assertEquals("text/plain",response.getContentType());
+    }
+
 }
