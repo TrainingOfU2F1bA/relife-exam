@@ -49,6 +49,13 @@ class RelifeMvcHandlerBuilderTest {
         assertThrows(IllegalArgumentException.class, executable);
     }
 
+    @Test
+    void should_throw_illgegalArgumentException_when_relifeAppHandler_of_addAction_is_null() {
+        Executable executable = () -> new RelifeMvcHandlerBuilder()
+                .addAction("path", RelifeMethod.GET, null);
+
+        assertThrows(IllegalArgumentException.class, executable);
+    }
 
     @Test
     void should_response_200_when_relifeAppHandler_process_return_null() {
