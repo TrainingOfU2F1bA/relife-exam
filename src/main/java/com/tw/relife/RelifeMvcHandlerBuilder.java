@@ -25,4 +25,8 @@ public class RelifeMvcHandlerBuilder {
     public RelifeAppHandler build() {
         return relifeAppHandler == null ? request -> new RelifeResponse(404) : relifeAppHandler;
     }
+
+    public RelifeMvcHandlerBuilder addController(Class<?> controller) {
+        return null;
+    }
 }
