@@ -1,4 +1,4 @@
-package com.tw.relife.test;
+package com.tw.relife;
 
 import com.tw.relife.*;
 import com.tw.relife.controller.*;
