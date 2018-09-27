@@ -69,4 +69,22 @@ class RelifeMvcMutipleHandlerBuilderTest {
         assertEquals("text/plain",response.getContentType());
     }
 
+    @Test
+    void should_be_mapping_different_status_which_annotation_on_exception() {
+          RelifeAppHandler handler = new RelifeMvcHandlerBuilder()
+                .addAction("/path", RelifeMethod.GET, request -> {throw new SampleNotFoundException();})
+                .addAction("/path", RelifeMethod.POST, request -> {throw new SampleBadRequetException();})
+        .build();
+
+        RelifeApp app = new RelifeApp(handler);
+        RelifeResponse studentResponse = app.process(
+                new RelifeRequest("/path", RelifeMethod.POST));
+
+        assertEquals(400,studentResponse.getStatus());
+
+        RelifeResponse response = app.process(
+                new RelifeRequest("/path", RelifeMethod.GET));
+
+        assertEquals(404,response.getStatus());
+    }
 }
