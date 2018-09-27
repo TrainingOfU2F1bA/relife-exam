@@ -5,6 +5,7 @@ import com.tw.relife.annotation.RelifeRequestMapping;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 
 public class RelifeMvcHandlerBuilder {
@@ -33,7 +34,7 @@ public class RelifeMvcHandlerBuilder {
     }
 
     public RelifeMvcHandlerBuilder addController(Class<?> controller) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        Constructor<?> constructor = hasDefaultContructor(controller);
+        Constructor<?> constructor = validateContructor(controller);
         this.controllerInstence = constructor.newInstance();
 
         for (Method method : controller.getDeclaredMethods()) {
@@ -45,13 +46,18 @@ public class RelifeMvcHandlerBuilder {
         return this;
     }
 
-    private Constructor<?> hasDefaultContructor(Class<?> controller) throws NoSuchMethodException {
+    private Constructor<?> validateContructor(Class<?> controller) throws NoSuchMethodException {
+
+        if (controller.isInterface()|| Modifier.isAbstract(controller.getModifiers())){
+            throw new IllegalArgumentException(String.format("%s is abstract", controller.getName()));
+        }
+
         Constructor<?> constructor = null;
 
         try {
             constructor = controller.getConstructor();
         } catch (NoSuchMethodException e) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(String.format("%s has no default constructor", controller.getName()));
         }
 
         return constructor;
