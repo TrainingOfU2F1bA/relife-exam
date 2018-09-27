@@ -1,20 +1,19 @@
 package com.tw.relife;
 
-import javax.swing.*;
-
-public class RelifeAppHandlerImpl extends RelifeApp{
+public class RelifeAppHandlerImpl implements RelifeAppHandler{
     private ActionKey actionKey;
+    private RelifeAppHandler relifeAppHandler;
 
     public RelifeAppHandlerImpl(ActionKey actionKey, RelifeAppHandler relifeAppHandler) {
-        super(relifeAppHandler);
         this.actionKey = actionKey;
+        this.relifeAppHandler = relifeAppHandler;
     }
 
     @Override
     public RelifeResponse process(RelifeRequest request) {
         ActionKey key = new ActionKey(request.getPath(), request.getMethod());
         if (key.equals(actionKey)){
-            RelifeResponse response = super.process(request);
+            RelifeResponse response = relifeAppHandler.process(request);
             return response == null ? new RelifeResponse(200) : response;
         }
         return new RelifeResponse(404);
