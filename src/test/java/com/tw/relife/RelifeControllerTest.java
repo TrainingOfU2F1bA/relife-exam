@@ -72,4 +72,16 @@ class RelifeControllerTest {
         assertThrows(IllegalArgumentException.class, executable);
 
     }
+
+    @Test
+    void should_throw_illegalArugementExcepton_when_register_a_controller_with_relifeController_with_a_param_which_type_is_not_relifeRequest() {
+        Executable executable = () -> new RelifeMvcHandlerBuilder()
+                .addController(ControllerWithOneStringParamMethod.class)
+                .build();
+
+        assertThrows(IllegalArgumentException.class, executable);
+
+    }
+
+
 }

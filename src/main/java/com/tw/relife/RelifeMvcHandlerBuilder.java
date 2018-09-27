@@ -41,10 +41,20 @@ public class RelifeMvcHandlerBuilder {
         for (Method method : controller.getDeclaredMethods()) {
             RelifeRequestMapping annotation = method.getAnnotation(RelifeRequestMapping.class);
             if (annotation == null) continue;
+
+            validateAction(method);
+
             addAction(annotation.value(),annotation.method(),new RelifeControllerMethodHandler(controllerInstence,method));
         }
 
         return this;
+    }
+
+    private void validateAction(Method method) {
+        Class<?>[] parameterTypes = method.getParameterTypes();
+        if (!(parameterTypes.length == 1 && RelifeRequest.class.equals(parameterTypes[0]))) {
+            throw new IllegalArgumentException("Wrong action method");
+        }
     }
 
     private Constructor<?> validateContructor(Class<?> controller) throws NoSuchMethodException {
