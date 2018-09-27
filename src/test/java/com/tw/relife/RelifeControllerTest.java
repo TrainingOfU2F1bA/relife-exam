@@ -125,4 +125,25 @@ class RelifeControllerTest {
         assertEquals("Hi from /hi",hiResponse.getContent());
         assertEquals("text/plain",hiResponse.getContentType());
     }
-}
+
+    @Test
+    void should_mapping_same_action_when_register_controller_and_multiple_same_mapping_be_register() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        RelifeAppHandler handler = new RelifeMvcHandlerBuilder()
+                .addController(MutipleSameActionController.class)
+                .build();
+
+        RelifeApp app = new RelifeApp(handler);
+        RelifeResponse response = app.process(
+                new RelifeRequest("/path", RelifeMethod.GET));
+
+        assertEquals(200,response.getStatus());
+        assertEquals("Hi from /path",response.getContent());
+        assertEquals("text/plain",response.getContentType());
+
+        RelifeResponse sameResponse = app.process(
+                new RelifeRequest("/path", RelifeMethod.GET));
+
+        assertEquals(200,sameResponse.getStatus());
+        assertEquals("Hi from /path",sameResponse.getContent());
+        assertEquals("text/plain",sameResponse.getContentType());
+    }

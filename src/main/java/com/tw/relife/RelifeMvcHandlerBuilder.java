@@ -7,6 +7,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class RelifeMvcHandlerBuilder {
@@ -38,14 +39,13 @@ public class RelifeMvcHandlerBuilder {
         Constructor<?> constructor = validateContructor(controller);
         this.controllerInstence = constructor.newInstance();
 
-        for (Method method : controller.getDeclaredMethods()) {
+        Arrays.stream(controller.getDeclaredMethods()).sorted(RelifeMvcHandlerBuilder::compareMethods).forEach(method -> {
             RelifeRequestMapping annotation = method.getAnnotation(RelifeRequestMapping.class);
-            if (annotation == null) continue;
-
-            validateAction(method);
-
-            addAction(annotation.value(),annotation.method(),new RelifeControllerMethodHandler(controllerInstence,method));
-        }
+            if (annotation != null) {
+                validateAction(method);
+                addAction(annotation.value(), annotation.method(), new RelifeControllerMethodHandler(controllerInstence, method));
+            }
+        });
 
         return this;
     }
@@ -84,5 +84,19 @@ public class RelifeMvcHandlerBuilder {
         }
 
         return constructor;
+    }
+
+    private static int compareMethods(Method method1, Method method2) {
+        int result = method1.getName().compareTo(method2.getName());
+        if (result == 0) result = method1.getParameterCount() - method2.getParameterCount();
+        if (result == 0 ){
+            for (int i = 0; i < method1.getParameterTypes().length; i++) {
+                result = method2.getParameterTypes()[i].getName().compareTo(method1.getGenericParameterTypes()[i].getTypeName());
+                if (result != 0) {
+                    break;
+                }
+            }
+        }
+        return result;
     }
 }
