@@ -24,6 +24,7 @@ public class RelifeApp implements RelifeAppHandler {
                 Throwable exception = ((InvocationTargetException) e).getTargetException();
                 return handleException(exception);
             }
+
             return handleException(e);
         }
     }
