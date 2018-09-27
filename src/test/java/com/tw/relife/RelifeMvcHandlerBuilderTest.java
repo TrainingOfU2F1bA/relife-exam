@@ -1,5 +1,6 @@
 package com.tw.relife;
 
+import com.tw.relife.test.SampleNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
@@ -40,5 +41,18 @@ class RelifeMvcHandlerBuilderTest {
         assertEquals(200,response.getStatus());
         assertEquals(null,response.getContent());
         assertEquals(null,response.getContentType());
+    }
+
+    @Test
+    void should_can_return_status_code_which_be_annotation_on_exception() {
+        RelifeAppHandler handler = new RelifeMvcHandlerBuilder()
+                .addAction("/path", RelifeMethod.GET, request -> {throw new SampleNotFoundException();})
+        .build();
+
+        RelifeApp app = new RelifeApp(handler);
+        RelifeResponse response = app.process(
+                new RelifeRequest("/path", RelifeMethod.GET));
+
+        assertEquals(404, response.getStatus());
     }
 }
