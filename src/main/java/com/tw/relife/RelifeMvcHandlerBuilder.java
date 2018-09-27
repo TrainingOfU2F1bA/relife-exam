@@ -7,14 +7,17 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 public class RelifeMvcHandlerBuilder {
 
     private RelifeAppHandlerImpl relifeAppHandler;
     private HashMap<ActionKey, RelifeAppHandler> handlers = new HashMap<>();
     private Object controllerInstence;
+    private List<Class<?>> classes =new ArrayList<>();
 
     public RelifeMvcHandlerBuilder addAction(String path, RelifeMethod relifeMethod, RelifeAppHandler relifeAppHandler) {
         validateAction(path, relifeMethod, relifeAppHandler);
@@ -37,6 +40,10 @@ public class RelifeMvcHandlerBuilder {
 
     public RelifeMvcHandlerBuilder addController(Class<?> controller) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         Constructor<?> constructor = validateContructor(controller);
+        if (classes.contains(controller)) {
+           throw new IllegalArgumentException("The controller has been register");
+        }
+        classes.add(controller);
         this.controllerInstence = constructor.newInstance();
 
         Arrays.stream(controller.getDeclaredMethods()).sorted(RelifeMvcHandlerBuilder::compareMethods).forEach(method -> {
