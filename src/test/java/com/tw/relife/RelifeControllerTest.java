@@ -1,6 +1,7 @@
 package com.tw.relife;
 
 import com.tw.relife.controller.AbstractController;
+import com.tw.relife.controller.ControllerTestInterface;
 import com.tw.relife.controller.ControllerWithoutDefaultConstructor;
 import com.tw.relife.controller.OneActionController;
 import com.tw.relife.test.SampleBadRequetException;
@@ -27,6 +28,15 @@ class RelifeControllerTest {
     void should_throw_illegalArugementExcepton_when_register_a_abstract_class() {
         Executable executable = () -> new RelifeMvcHandlerBuilder()
                 .addController(AbstractController.class)
+                .build();
+
+        assertThrows(IllegalArgumentException.class, executable);
+    }
+
+    @Test
+    void should_throw_illegalArugementExcepton_when_register_a_interface() {
+        Executable executable = () -> new RelifeMvcHandlerBuilder()
+                .addController(ControllerTestInterface.class)
                 .build();
 
         assertThrows(IllegalArgumentException.class, executable);
