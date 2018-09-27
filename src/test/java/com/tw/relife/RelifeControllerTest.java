@@ -147,3 +147,27 @@ class RelifeControllerTest {
         assertEquals("Hi from /path",sameResponse.getContent());
         assertEquals("text/plain",sameResponse.getContentType());
     }
+
+    @Test
+    void should_be_mapping_different_status_which_annotation_on_exception() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        RelifeAppHandler handler = new RelifeMvcHandlerBuilder()
+                .addController(ExceptionTestController.class)
+                .build();
+
+        RelifeApp app = new RelifeApp(handler);
+        RelifeResponse badRequest = app.process(
+                new RelifeRequest("/badRequest", RelifeMethod.GET));
+
+        assertEquals(400,badRequest.getStatus());
+
+        RelifeResponse notFound = app.process(
+                new RelifeRequest("/notFound", RelifeMethod.GET));
+
+        assertEquals(404,notFound.getStatus());
+
+        RelifeResponse response = app.process(
+                new RelifeRequest("/normalException", RelifeMethod.GET));
+
+        assertEquals(500,response.getStatus());
+    }
+}

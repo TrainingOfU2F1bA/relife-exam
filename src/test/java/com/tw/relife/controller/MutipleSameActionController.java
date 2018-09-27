@@ -5,9 +5,12 @@ import com.tw.relife.RelifeRequest;
 import com.tw.relife.RelifeResponse;
 import com.tw.relife.annotation.RelifeController;
 import com.tw.relife.annotation.RelifeRequestMapping;
+import com.tw.relife.test.SampleBadRequetException;
+import com.tw.relife.test.SampleNotFoundException;
 
 @RelifeController
 public class MutipleSameActionController {
+
 
     @RelifeRequestMapping(value = "/path", method = RelifeMethod.GET)
     public RelifeResponse sayHi(RelifeRequest request) {
@@ -24,4 +27,5 @@ public class MutipleSameActionController {
                 "Hi from " + request.getPath(),
                 "text/plain");
     }
+
 }

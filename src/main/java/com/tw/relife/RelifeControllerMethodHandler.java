@@ -15,6 +15,6 @@ public class RelifeControllerMethodHandler implements  RelifeAppHandler {
 
     @Override
     public RelifeResponse process(RelifeRequest request) throws InvocationTargetException, IllegalAccessException {
-        return (RelifeResponse) method.invoke(controller,request);
+            return (RelifeResponse) method.invoke(controller,request);
     }
 }
