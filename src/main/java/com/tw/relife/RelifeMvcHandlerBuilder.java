@@ -1,5 +1,6 @@
 package com.tw.relife;
 
+import com.tw.relife.annotation.RelifeController;
 import com.tw.relife.annotation.RelifeRequestMapping;
 
 import java.lang.reflect.Constructor;
@@ -54,6 +55,10 @@ public class RelifeMvcHandlerBuilder {
 
         if (controller.isInterface()|| Modifier.isAbstract(controller.getModifiers())){
             throw new IllegalArgumentException(String.format("%s is abstract", controller.getName()));
+        }
+
+        if (!controller.isAnnotationPresent(RelifeController.class)) {
+            throw new IllegalArgumentException("controller is not be RelifeController annotated");
         }
 
         Constructor<?> constructor = null;

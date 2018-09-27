@@ -1,9 +1,6 @@
 package com.tw.relife;
 
-import com.tw.relife.controller.AbstractController;
-import com.tw.relife.controller.ControllerTestInterface;
-import com.tw.relife.controller.ControllerWithoutDefaultConstructor;
-import com.tw.relife.controller.OneActionController;
+import com.tw.relife.controller.*;
 import com.tw.relife.test.SampleBadRequetException;
 import com.tw.relife.test.SampleNotFoundException;
 import org.junit.jupiter.api.Test;
@@ -64,5 +61,15 @@ class RelifeControllerTest {
                 .build();
 
         assertThrows(IllegalArgumentException.class, executable);
+    }
+
+    @Test
+    void should_throw_illegalArugementExcepton_when_register_a_controller_without_relifeController_annotation() {
+        Executable executable = () -> new RelifeMvcHandlerBuilder()
+                .addController(ControllerWithoutRelifeControllerAnnotation.class)
+                .build();
+
+        assertThrows(IllegalArgumentException.class, executable);
+
     }
 }
