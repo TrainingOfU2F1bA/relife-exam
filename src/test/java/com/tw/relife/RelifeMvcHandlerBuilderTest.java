@@ -34,6 +34,19 @@ class RelifeMvcHandlerBuilderTest {
     }
 
     @Test
+    void should_can_return_status_code_which_be_annotation_on_exception() {
+        RelifeAppHandler handler = new RelifeMvcHandlerBuilder()
+                .addAction("/path", RelifeMethod.GET, request -> {throw new SampleNotFoundException();})
+                .build();
+
+        RelifeApp app = new RelifeApp(handler);
+        RelifeResponse response = app.process(
+                new RelifeRequest("/path", RelifeMethod.GET));
+
+        assertEquals(404, response.getStatus());
+    }
+
+    @Test
     void should_throw_illgegalArgumentException_when_relireMethod_of_addAction_is_null() {
         Executable executable = () ->new RelifeMvcHandlerBuilder()
                 .addAction("/path", null, request -> new RelifeResponse(200,"Hello","text/plain"));
@@ -69,18 +82,5 @@ class RelifeMvcHandlerBuilderTest {
         assertEquals(200,response.getStatus());
         assertEquals(null,response.getContent());
         assertEquals(null,response.getContentType());
-    }
-
-    @Test
-    void should_can_return_status_code_which_be_annotation_on_exception() {
-        RelifeAppHandler handler = new RelifeMvcHandlerBuilder()
-                .addAction("/path", RelifeMethod.GET, request -> {throw new SampleNotFoundException();})
-        .build();
-
-        RelifeApp app = new RelifeApp(handler);
-        RelifeResponse response = app.process(
-                new RelifeRequest("/path", RelifeMethod.GET));
-
-        assertEquals(404, response.getStatus());
     }
 }
