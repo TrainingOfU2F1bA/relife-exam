@@ -30,6 +30,15 @@ class RelifeMvcHandlerBuilderTest {
 
     @Test
     void should_response_200_when_relifeAppHandler_process_return_null() {
+        RelifeAppHandler handler = new RelifeMvcHandlerBuilder()
+                .addAction("/path", RelifeMethod.GET, request -> null)
+        .build();
+        RelifeApp app = new RelifeApp(handler);
+        RelifeResponse response = app.process(
+                new RelifeRequest("/path", RelifeMethod.GET));
 
+        assertEquals(200,response.getStatus());
+        assertEquals(null,response.getContent());
+        assertEquals(null,response.getContentType());
     }
 }

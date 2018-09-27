@@ -14,7 +14,8 @@ public class RelifeAppHandlerImpl extends RelifeApp{
     public RelifeResponse process(RelifeRequest request) {
         ActionKey key = new ActionKey(request.getPath(), request.getMethod());
         if (key.equals(actionKey)){
-           return super.process(request);
+            RelifeResponse response = super.process(request);
+            return response == null ? new RelifeResponse(200) : response;
         }
         return new RelifeResponse(404);
     }
