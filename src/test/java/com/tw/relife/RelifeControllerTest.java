@@ -16,6 +16,21 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class RelifeControllerTest {
     @Test
+    void should_can_register_one_action_use_by_an_controller() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        RelifeAppHandler handler = new RelifeMvcHandlerBuilder()
+                .addController(OneActionController.class)
+                .build();
+
+        RelifeApp app = new RelifeApp(handler);
+        RelifeResponse response = app.process(
+                new RelifeRequest("/path", RelifeMethod.GET));
+
+        assertEquals(200,response.getStatus());
+        assertEquals("Hello from /path",response.getContent());
+        assertEquals("text/plain",response.getContentType());
+    }
+
+    @Test
     void should_throw_illegalArugementExcepton_when_register_a_controller_without_defalut_construct() {
        Executable executable = () -> new RelifeMvcHandlerBuilder()
                 .addController(ControllerWithoutDefaultConstructor.class)
@@ -43,17 +58,11 @@ class RelifeControllerTest {
     }
 
     @Test
-    void should_can_register_one_action_use_by_an_controller() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        RelifeAppHandler handler = new RelifeMvcHandlerBuilder()
-                .addController(OneActionController.class)
-        .build();
+    void should_throw_illegalArugementExcepton_when_register_null() {
+        Executable executable = () -> new RelifeMvcHandlerBuilder()
+                .addController(null)
+                .build();
 
-        RelifeApp app = new RelifeApp(handler);
-        RelifeResponse response = app.process(
-                new RelifeRequest("/path", RelifeMethod.GET));
-
-        assertEquals(200,response.getStatus());
-        assertEquals("Hello from /path",response.getContent());
-        assertEquals("text/plain",response.getContentType());
+        assertThrows(IllegalArgumentException.class, executable);
     }
 }

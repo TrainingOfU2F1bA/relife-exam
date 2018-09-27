@@ -48,6 +48,10 @@ public class RelifeMvcHandlerBuilder {
 
     private Constructor<?> validateContructor(Class<?> controller) throws NoSuchMethodException {
 
+        if (controller == null) {
+            throw new IllegalArgumentException("controller can not be null");
+        }
+
         if (controller.isInterface()|| Modifier.isAbstract(controller.getModifiers())){
             throw new IllegalArgumentException(String.format("%s is abstract", controller.getName()));
         }
