@@ -1,15 +1,29 @@
 package com.tw.relife;
 
+import com.tw.relife.controller.ControllerWithoutDefaultConstructor;
 import com.tw.relife.controller.OneActionController;
 import com.tw.relife.test.SampleBadRequetException;
 import com.tw.relife.test.SampleNotFoundException;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
+
+import java.lang.reflect.InvocationTargetException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class RelifeControllerTest {
     @Test
-    void should_can_handle_request_with_mutiple_request_path() {
+    void should_throw_illegalArugementExcepton_when_register_a_controller_without_defalut_construct() {
+       Executable executable = () -> new RelifeMvcHandlerBuilder()
+                .addController(ControllerWithoutDefaultConstructor.class)
+                .build();
+
+        assertThrows(IllegalArgumentException.class, executable);
+    }
+
+    @Test
+    void should_can_register_one_action_use_by_an_controller() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         RelifeAppHandler handler = new RelifeMvcHandlerBuilder()
                 .addController(OneActionController.class)
         .build();
